@@ -1,0 +1,61 @@
+apply plugin: 'com.android.application'
+def AAVersion = '4.3.1'
+
+android {
+    compileSdkVersion 25
+    defaultConfig {
+        applicationId "com.zhongyong.smartvideo"
+        minSdkVersion 16
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        ndk {
+            // 设置支持的SO库架构
+            abiFilters 'armeabi' ,'armeabi-v7a'//, 'x86', 'arm64-v8a', 'x86_64'
+        }
+        //AS3.0添加部分
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath true
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+repositories {
+    flatDir {
+        dirs 'libs' //就是你放aar的目录地址
+    }
+}
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    implementation 'com.android.support:appcompat-v7:25.3.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    //androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    //androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    compile(name: 'lib-dds', ext: 'aar')
+    /* butterKnife绑定*/
+    implementation 'com.jakewharton:butterknife:7.0.1'
+    //引入严正杰recyclerView_swipe
+    implementation 'com.yanzhenjie:recyclerview-swipe:1.1.4'
+    /*glide图片加载*/
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    /*引入gson*/
+    compile 'com.google.code.gson:gson:2.6.2'
+    /*eventBus事件总线*/
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.android.support:customtabs:25.3.1'
+    compile 'com.airbnb.android:lottie:2.0.0'
+    annotationProcessor "org.androidannotations:androidannotations:$AAVersion"
+    compile "org.androidannotations:androidannotations-api:$AAVersion"
+}

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="65dp">
+
+    <RelativeLayout
+        android:id="@+id/itemAdd_name_log"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="12dp">
+
+        <TextView
+            android:id="@+id/sceneNameTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_12"
+            android:text="我是第一个场景"
+            android:textColor="@color/colorBlue"
+            android:textSize="16sp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/itemAdd_name_log"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/margin_12"
+        android:layout_marginTop="5dp"
+        android:paddingBottom="5dp">
+
+        <TextView
+            android:id="@+id/itemAdd_ip_log"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="监控地址："
+            android:textColor="@color/colorBlue"
+            android:textSize="@dimen/font_16"/>
+
+        <TextView
+            android:id="@+id/itemAdd_address_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_12"
+            android:layout_toRightOf="@+id/itemAdd_ip_log"
+            android:text=""
+            android:textColor="@color/colorBlue"
+            android:textSize="@dimen/font_16"/>
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="12dp"
+        android:background="@drawable/express"/>
+</RelativeLayout>
