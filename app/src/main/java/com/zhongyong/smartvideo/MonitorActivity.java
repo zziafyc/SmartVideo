@@ -17,6 +17,8 @@ import butterknife.Bind;
 public class MonitorActivity extends BaseActivity implements View.OnClickListener {
     @Bind(R.id.actionbar_back)
     RelativeLayout backRv;
+    @Bind(R.id.title_tv_message)
+    TextView titleTv;
     @Bind(R.id.videoVv)
     VideoView mVideoView;
     @Bind(R.id.sceneNameTv)
@@ -44,6 +46,7 @@ public class MonitorActivity extends BaseActivity implements View.OnClickListene
                 if (model != null) {
                     sceneNameTv.setText(model.getName());
                     sceneIpTv.setText(model.getAddress());
+                    titleTv.setText(model.getName());
                 }
             }
         }
@@ -63,6 +66,7 @@ public class MonitorActivity extends BaseActivity implements View.OnClickListene
             public void onPrepared(MediaPlayer player) {
                 mVideoView.start();
                 mProgressBar.setVisibility(View.GONE);
+
             }
         });
         //播放完成回调

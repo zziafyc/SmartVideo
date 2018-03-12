@@ -11,7 +11,7 @@
         android:layout_width="40dp"
         android:layout_height="match_parent"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/margin_12">
+        android:layout_marginLeft="@dimen/margin_8">
 
         <ImageView
             android:id="@+id/cab_titleBack_iv"
@@ -34,7 +34,7 @@
             android:ellipsize="end"
             android:maxEms="10"
             android:singleLine="true"
-            android:text="智慧武警"
+            android:text="中用科技智慧武警"
             android:textColor="@color/white"
             android:textSize="18sp"/>
     </LinearLayout>

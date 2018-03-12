@@ -68,11 +68,11 @@ public class MonitorListActivity extends BaseActivity {
         //获取
         boolean flag = (boolean) SharePreferenceUtils.get(MonitorListActivity.this, "flag_exist_address", false);
         if (!flag) {
+            mList.add(new MonitorScene("会议室监控", Constants.RTSP_MEETING));
+            mList.add(new MonitorScene("走廊监控", Constants.RTSP_SOUTH_GALLERY));
+            mList.add(new MonitorScene("图书馆", "rtsp://10.161.56.143:554/Streaming/Channels/101?transportmode=unicast&profile=Profile_1"));
             mList.add(new MonitorScene("楼顶1", "rtsp://10.161.56.141:554/Streaming/Channels/101?transportmode=unicast&profile=Profile_101"));
             mList.add(new MonitorScene("楼顶2", "rtsp://10.161.56.142:554/Streaming/Channels/101?transportmode=unicast&profile=Profile_101"));
-            mList.add(new MonitorScene("图书馆", "rtsp://10.161.56.143:554/Streaming/Channels/101?transportmode=unicast&profile=Profile_1"));
-            //mList.add(new MonitorScene("中用测试", Constants.RTSP_SOUTH_GALLERY));
-
             mAdapter.notifyDataSetChanged();
             SharePreferenceUtils.put(MonitorListActivity.this, "monitorScenes", mList);
             SharePreferenceUtils.put(MonitorListActivity.this, "flag_exist_address", true);
@@ -109,7 +109,7 @@ public class MonitorListActivity extends BaseActivity {
         mAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent = new Intent(MonitorListActivity.this, MonitorActivity.class);
+                Intent intent = new Intent(MonitorListActivity.this, MonitorActivity2.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("monitorScene", mList.get(position));
                 intent.putExtras(bundle);

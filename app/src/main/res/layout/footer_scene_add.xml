@@ -3,11 +3,11 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical">
+
     <RelativeLayout
         android:id="@+id/fd_deviceSearch_rv"
         android:layout_width="match_parent"
         android:layout_height="65dp"
-        android:background="@drawable/bottom_border"
         android:orientation="horizontal"
         android:visibility="visible">
 
@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/margin_12"
-            android:text="添加设备"
+            android:text="添加监控信息"
             android:textColor="@color/colorBlue"
             android:textSize="@dimen/font_16"/>
 

@@ -56,6 +56,7 @@ public class CreateMonitorActivity extends BaseActivity {
                 }
 
                 MonitorScene newModel = new MonitorScene(sceneNameEdt.getText().toString(), addressEdt.getText().toString());
+                newModel.setAdd(true);
                 mMonitorScenes = (List<MonitorScene>) SharePreferenceUtils.get(CreateMonitorActivity.this, "monitorScenes", new TypeToken<List<MonitorScene>>() {
                 }.getType());
                 if (mMonitorScenes == null) {

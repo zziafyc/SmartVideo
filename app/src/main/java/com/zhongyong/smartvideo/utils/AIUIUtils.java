@@ -18,7 +18,7 @@ public class AIUIUtils {
     private static InetAddress mAddress;
     private static DatagramSocket socket = null;
     private static String ip = "255.255.255.255"; //发送给整个局域网
-    private static final int SendPort = 9999;  //发送方和接收方需要端口一致
+    private static final int SendPort = 3456;  //发送方和接收方需要端口一致
 
     public static void sendContextToAIUI(final String content) {
         //初始化socket

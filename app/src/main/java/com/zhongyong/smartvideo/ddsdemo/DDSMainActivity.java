@@ -7,7 +7,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -23,12 +25,17 @@ import com.aispeech.dui.dds.agent.MessageObserver;
 import com.aispeech.dui.dds.exceptions.DDSNotInitCompleteException;
 import com.aispeech.dui.dds.update.DDSUpdateListener;
 import com.aispeech.dui.dds.utils.PrefUtil;
+import com.zhongyong.smartvideo.App;
 import com.zhongyong.smartvideo.BaseActivity;
+import com.zhongyong.smartvideo.Constants;
+import com.zhongyong.smartvideo.MonitorActivity2;
+import com.zhongyong.smartvideo.MonitorScene;
 import com.zhongyong.smartvideo.R;
 import com.zhongyong.smartvideo.ddsdemo.webview.HybridWebViewClient;
 import com.zhongyong.smartvideo.ddsdemo.widget.InputField;
 import com.zhongyong.smartvideo.utils.AIUIUtils;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -48,7 +55,7 @@ public class DDSMainActivity extends BaseActivity implements InputField.Listener
     private boolean mLoadedTotally = false;
     private Dialog dialog;
     private Handler mHandler = new Handler();
-    private MyMessageObserver mMessageObserver;
+    public static MyMessageObserver mMessageObserver;
 
     @Override
     public int getLayoutId() {
@@ -92,24 +99,33 @@ public class DDSMainActivity extends BaseActivity implements InputField.Listener
 
     @Override
     protected void onResume() {
+        App.getInstance().currentActivity = 0;
         DDS.getInstance().getAgent().subscribe(new String[]{"context.output.text", "context.input.text",
                 "avatar.silence", "avatar.listening", "avatar.understanding", "avatar.speaking", "context.widget.content"}, mMessageObserver);
 
-        inputField.getAvatarView().go();
+        if (inputField != null) {
+            inputField.getAvatarView().go();
+        }
         enableWakeIfNecessary();
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        DDS.getInstance().getAgent().unSubscribe(mMessageObserver);
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                inputField.toIdle();
-            }
-        });
-        disableWakeIfNecessary();
+        //DDS.getInstance().getAgent().unSubscribe(mMessageObserver);
+        if (!App.getInstance().flag) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (inputField != null) {
+                        inputField.toListen();
+                    }
+                }
+            });
+            enableWakeIfNecessary();
+        } else {
+            disableWakeIfNecessary();
+        }
         super.onPause();
     }
 
@@ -121,6 +137,8 @@ public class DDSMainActivity extends BaseActivity implements InputField.Listener
     @Override
     protected void onDestroy() {
         Log.d(TAG, "onDestroy");
+        DDS.getInstance().getAgent().unSubscribe(mMessageObserver);
+        disableWakeIfNecessary();
         super.onDestroy();
         unregisterReceiver(receiver);
         if (webContainer != null) {
@@ -160,7 +178,9 @@ public class DDSMainActivity extends BaseActivity implements InputField.Listener
             webview.getSettings().setMediaPlaybackRequiresUserGesture(false);
         }
         try {
-            loadUI(DDS.getInstance().getAgent().getValidH5Path());
+            if (DDS.getInstance().getAgent() != null) {
+                loadUI(DDS.getInstance().getAgent().getValidH5Path());
+            }
         } catch (DDSNotInitCompleteException e) {
             e.printStackTrace();
         }
@@ -170,13 +190,15 @@ public class DDSMainActivity extends BaseActivity implements InputField.Listener
 
 
     void loadUI(String h5UiPath) {
-        Log.d(TAG, "loadUI " + h5UiPath);
-        String url = h5UiPath;
-        mLoadedTotally = false;
-        webview.loadUrl(url);
+        if (!TextUtils.isEmpty(h5UiPath)) {
+            Log.d(TAG, "loadUI " + h5UiPath);
+            String url = h5UiPath;
+            mLoadedTotally = false;
+            webview.loadUrl(url);
+        }
     }
 
-    void enableWakeIfNecessary() {
+    public static void enableWakeIfNecessary() {
         try {
             DDS.getInstance().getAgent().enableWakeup();
         } catch (DDSNotInitCompleteException e) {
@@ -184,7 +206,7 @@ public class DDSMainActivity extends BaseActivity implements InputField.Listener
         }
     }
 
-    void disableWakeIfNecessary() {
+    public static void disableWakeIfNecessary() {
         try {
             DDS.getInstance().getAgent().stopDialog();
             DDS.getInstance().getAgent().disableWakeup();
@@ -218,6 +240,22 @@ public class DDSMainActivity extends BaseActivity implements InputField.Listener
         } catch (JSONException e) {
             e.printStackTrace();
         }
+       /* try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        try {
+            DDS.getInstance().getAgent().avatarClick();
+        } catch (DDSNotInitCompleteException e) {
+            e.printStackTrace();
+        }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                inputField.toListen();
+            }
+        });*/
     }
 
     @Override
@@ -291,29 +329,36 @@ public class DDSMainActivity extends BaseActivity implements InputField.Listener
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        inputField.toIdle();
+                        if (inputField != null) {
+                            inputField.toIdle();
+                        }
                     }
                 });
             } else if ("avatar.listening".equals(message)) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        inputField.toListen();
+                        if (inputField != null) {
+                            inputField.toListen();
+                        }
                     }
                 });
             } else if ("avatar.understanding".equals(message)) {
-
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        inputField.toRecognize();
+                        if (inputField != null) {
+                            inputField.toRecognize();
+                        }
                     }
                 });
             } else if ("avatar.speaking".equals(message)) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        inputField.toSpeak();
+                        if (inputField != null) {
+                            inputField.toSpeak();
+                        }
                     }
                 });
 
@@ -322,8 +367,49 @@ public class DDSMainActivity extends BaseActivity implements InputField.Listener
     }
 
     private void dealWithMessage(String message) {
-        if (message.contains("空调") || message.contains("投影仪") || message.contains("加湿器")) {
+        if (message.contains("空调") || message.contains("投影仪") || message.contains("加湿器")
+                || message.contains("灯") || message.contains("制冷模式") || message.contains("制热模式")
+                || message.contains("电视") || message.contains("换台") || message.contains("频道")
+                || message.contains("窗帘") || message.contains("纱帘") || message.contains("布帘")) {
             AIUIUtils.sendContextToAIUI(message);
+        } else if (message.contains("监控")) {
+            MonitorScene scene = null;
+            if (message.contains("会议室")) {
+                scene = new MonitorScene("会议室监控", Constants.RTSP_MEETING);
+            } else if (message.contains("走廊")) {
+                scene = new MonitorScene("走廊监控", Constants.RTSP_SOUTH_GALLERY);
+            } else if (message.contains("一楼监控")) {
+                scene = new MonitorScene("一楼监控", Constants.RTSP_FIRST_MONITOR);
+                EventBus.getDefault().post(scene);
+            } else if (message.contains("二楼监控")) {
+                scene = new MonitorScene("二楼监控", Constants.RTSP_SECOND_MONITOR);
+                EventBus.getDefault().post(scene);
+            }
+            //停顿一段时间后再跳转，供语音交互
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (scene != null && App.getInstance().currentActivity == 0) {
+                Intent intent = new Intent(this, MonitorActivity2.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("monitorScene", scene);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        } else if (message.contains("打开对讲机")) {
+            //当进入录音机时，取消语音监听
+            App.getInstance().flag = true;
+
+            //此时启动对讲机应用
+            PackageManager packageManager = getPackageManager();
+            Intent intent = new Intent();
+            intent = packageManager.getLaunchIntentForPackage("android.serialport.sample");
+            if (intent == null) {
+                showToast("APP not found!");
+            }
+            startActivity(intent);
         }
     }
 

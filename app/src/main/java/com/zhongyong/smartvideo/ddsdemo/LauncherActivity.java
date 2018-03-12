@@ -1,12 +1,10 @@
 package com.zhongyong.smartvideo.ddsdemo;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
 
 import com.aispeech.ailog.AILog;
 import com.aispeech.dui.dds.DDS;
-import com.zhongyong.smartvideo.MainActivity;
+import com.zhongyong.smartvideo.BaseActivity;
 import com.zhongyong.smartvideo.R;
 
 
@@ -21,13 +19,16 @@ import com.zhongyong.smartvideo.R;
  * Created by jinrui.gan on 17-3-12.
  */
 
-public class LauncherActivity extends Activity {
+public class LauncherActivity extends BaseActivity {
     private static final String TAG = "LauncherActivity";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_launcher);
+    public int getLayoutId() {
+        return R.layout.activity_launcher;
+    }
+
+    @Override
+    public void initViewsAndEvents() {
         new Thread() {
             public void run() {
                 checkDDSReady();
@@ -39,17 +40,18 @@ public class LauncherActivity extends Activity {
     public void checkDDSReady() {
         while (true) {
             if (DDS.getInstance().isInitComplete()) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                //先等待再跳转
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Intent intent = new Intent(getApplicationContext(), DDSMainActivity.class);
                 startActivity(intent);
                 finish();
                 break;
             } else {
                 AILog.w(TAG, "waiting  init complete finish...");
-            }
-            try {
-                Thread.sleep(800);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
         }
     }

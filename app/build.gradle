@@ -2,10 +2,11 @@ apply plugin: 'com.android.application'
 def AAVersion = '4.3.1'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "com.zhongyong.smartvideo"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -54,8 +55,10 @@ dependencies {
     compile 'com.google.code.gson:gson:2.6.2'
     /*eventBus事件总线*/
     compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'com.android.support:customtabs:25.3.1'
+    compile 'com.android.support:customtabs:26.1.0'
     compile 'com.airbnb.android:lottie:2.0.0'
     annotationProcessor "org.androidannotations:androidannotations:$AAVersion"
     compile "org.androidannotations:androidannotations-api:$AAVersion"
+    compile(name:'libvlc-3.0.0-null', ext:'aar')
+    compile project(path: ':library')
 }

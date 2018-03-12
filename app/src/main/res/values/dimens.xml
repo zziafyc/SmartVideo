@@ -7,6 +7,7 @@
 
 
     <!--边距用margin表示，通常指组件之间的边距-->
+    <dimen name="margin_8">8dp</dimen>
     <dimen name="margin_12">12dp</dimen>
     <dimen name="margin_40">40dp</dimen>
 
@@ -14,6 +15,7 @@
     <!--边距用font表示，通常指字体的大小-->
     <dimen name="font_12">12sp</dimen>
     <dimen name="font_16">16sp</dimen>
+    <dimen name="font_18">18sp</dimen>
     <dimen name="font_30">30sp</dimen>
 
 

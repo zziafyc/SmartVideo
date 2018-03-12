@@ -10,6 +10,22 @@ public class MonitorScene implements Serializable {
     private String name;
     private String address;
 
+    public MonitorScene(String name, String address, boolean isAdd) {
+        this.name = name;
+        this.address = address;
+        this.isAdd = isAdd;
+    }
+
+    public boolean isAdd() {
+        return isAdd;
+    }
+
+    public void setAdd(boolean add) {
+        isAdd = add;
+    }
+
+    private boolean isAdd;
+
     public MonitorScene(String name, String address) {
         this.name = name;
         this.address = address;
