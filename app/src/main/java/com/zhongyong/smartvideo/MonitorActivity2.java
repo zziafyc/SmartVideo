@@ -275,16 +275,7 @@ public class MonitorActivity2 extends BaseActivity implements View.OnClickListen
 
     @Subscribe
     public void AddMonitorScene(final MonitorScene model) {
-        if (model.getName().contains("一楼监控")) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    titleTv.setText(model.getName());
-                    initVideo(model.getAddress());
-                }
-            });
-
-        } else if (model.getName().contains("二楼监控")) {
+        if (model.getName().contains("监控")) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

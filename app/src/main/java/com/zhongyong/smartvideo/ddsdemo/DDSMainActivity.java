@@ -380,14 +380,16 @@ public class DDSMainActivity extends BaseActivity implements InputField.Listener
                 scene = new MonitorScene("走廊监控", Constants.RTSP_SOUTH_GALLERY);
             } else if (message.contains("一楼监控")) {
                 scene = new MonitorScene("一楼监控", Constants.RTSP_FIRST_MONITOR);
-                EventBus.getDefault().post(scene);
             } else if (message.contains("二楼监控")) {
                 scene = new MonitorScene("二楼监控", Constants.RTSP_SECOND_MONITOR);
-                EventBus.getDefault().post(scene);
+            }else{
+                //默认是打开会议室监控
+                scene = new MonitorScene("会议室监控", Constants.RTSP_MEETING);
             }
+            EventBus.getDefault().post(scene);
             //停顿一段时间后再跳转，供语音交互
             try {
-                Thread.sleep(2000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

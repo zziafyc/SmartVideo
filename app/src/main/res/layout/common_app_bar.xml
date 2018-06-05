@@ -34,7 +34,7 @@
             android:ellipsize="end"
             android:maxEms="10"
             android:singleLine="true"
-            android:text="中用科技智慧武警"
+            android:text="中用科技智慧语音系统"
             android:textColor="@color/white"
             android:textSize="18sp"/>
     </LinearLayout>
